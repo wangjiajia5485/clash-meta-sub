@@ -2,32 +2,16 @@ mixed-port: 7890
 allow-lan: false
 mode: rule
 log-level: info
-ipv6: false
-
-dns:
-  enable: true
-  listen: 0.0.0.0:1053
-  enhanced-mode: fake-ip
-  fake-ip-range: 198.18.0.1/16
-  nameserver:
-    - 223.5.5.5
-    - 8.8.8.8
-  fallback:
-    - 1.1.1.1
-    - 8.8.4.4
-  fallback-filter:
-    geoip: true
-    geoip-code: CN
 
 proxies:
-  - name: JP
+  - name: 日本个人节点
     type: vless
     server: 108.160.139.113
     port: 443
     uuid: bb7cb2d9-061a-4f6d-b8b5-7468375819e2
     network: tcp
-    udp: true
     tls: true
+    udp: true
     flow: xtls-rprx-vision
     servername: addons.mozilla.org
     client-fingerprint: chrome
@@ -36,11 +20,13 @@ proxies:
       short-id: a7f3c91e
 
 proxy-groups:
-  - name: PROXY
+  - name: 代理选择
     type: select
     proxies:
-      - JP
+      - 日本个人节点
+      - DIRECT
 
 rules:
+  - GEOIP,LAN,DIRECT
   - GEOIP,CN,DIRECT
-  - MATCH,PROXY
+  - MATCH,代理选择
